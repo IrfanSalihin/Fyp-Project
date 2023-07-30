@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Registration Form</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+
+        .form-container {
+            max-width: 800px; /* Adjust the max-width value to fit your needs */
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Add this line to enable vertical scrolling if necessary */
+        }
+
+        .form-container h2 {
+            font-size: 40px; /* Adjust the font size to fit the content within the container */
+            font-weight: 500;
+            margin-bottom: 30px; /* Adjust the margin value to fit the content within the container */
+        }
+
+        .form-container .input-field {
+            margin-bottom: 15px; /* Adjust the margin value to fit the content within the container */
+        }
+
+        .form-container .input-field input[type="text"],
+        .form-container .input-field input[type="email"],
+        .form-container .input-field input[type="password"] {
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            transition: border-bottom-color 0.3s ease-in-out;
+        }
+
+        .form-container .input-field input[type="text"]:focus,
+        .form-container .input-field input[type="email"]:focus,
+        .form-container .input-field input[type="password"]:focus {
+            border-bottom-color: #26a69a;
+            box-shadow: 0 1px 0 0 #26a69a;
+        }
+
+        .form-container .input-field label {
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .form-container .input-field .helper-text {
+            margin: 0;
+            font-size: 12px;
+            color: #f44336;
+            height: 12px;
+        }
+
+        .form-container .input-field .error-text {
+            margin: 0;
+            font-size: 12px;
+            color: #f44336;
+            height: 12px;
+            display: none;
+        }
+
+        .form-container .input-field .success-text {
+            margin: 0;
+            font-size: 12px;
+            color: #4caf50;
+            height: 12px;
+            display: none;
+        }
+
+        .form-container .submit-btn {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 3px;
+            border: 1px solid;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .form-container .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Student Registration Form</h2>
+        <div class="input-field">
+            <input type="text" id="studentId" required>
+            <label for="studentId">Student ID</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="text" id="firstName" required>
+            <label for="firstName">First Name</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="text" id="lastName" required>
+            <label for="lastName">Last Name</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="text" id="phoneNumber" required>
+            <label for="phoneNumber">Phone Number</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="email" id="email" required>
+            <label for="email">Email</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="password" id="password" required>
+            <label for="password">Password</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="input-field">
+            <input type="password" id="confirmPassword" required>
+            <label for="confirmPassword">Confirm Password</label>
+            <span class="helper-text"></span>
+        </div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Choose File</span>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" required>
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+        <button class="submit-btn" onclick="register()">Register</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        const studentIdInput = document.getElementById('studentId');
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        const phoneNumberInput = document.getElementById('phoneNumber');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const profilePictureInput = document.getElementById('profilePicture');
+
+        function register() {
+            const studentId = studentIdInput.value.trim();
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const phoneNumber = phoneNumberInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const confirmPassword = confirmPasswordInput.value.trim();
+            const profilePicture = profilePictureInput.files[0]; // Get the selected file from the input
+
+            if (!studentId || !firstName || !lastName || !phoneNumber || !email || !password || !confirmPassword) {
+                showHelperText(studentIdInput, 'This field is required');
+                showHelperText(firstNameInput, 'This field is required');
+                showHelperText(lastNameInput, 'This field is required');
+                showHelperText(phoneNumberInput, 'This field is required');
+                showHelperText(emailInput, 'This field is required');
+                showHelperText(passwordInput, 'This field is required');
+                showHelperText(confirmPasswordInput, 'This field is required');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showHelperText(passwordInput, '');
+                showHelperText(confirmPasswordInput, 'Passwords do not match');
+                return;
+            }
+
+            if (!profilePicture) {
+                showHelperText(profilePictureInput, 'Please select a profile picture');
+                return;
+            }
+
+            if (!profilePicture.type.startsWith('image/')) {
+                showHelperText(profilePictureInput, 'Please select an image file');
+                return;
+            }
+
+            // Prepare the form data to include the profile picture
+            const formData = new FormData();
+            formData.append('studentId', studentId);
+            formData.append('firstName', firstName);
+            formData.append('lastName', lastName);
+            formData.append('phoneNumber', phoneNumber);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('confirmPassword', confirmPassword); // Add confirmPassword to match PHP script
+            formData.append('profilePicture', profilePicture, profilePicture.name); // Append the profile picture to the form data
+
+            jQuery.support.cors = true;
+
+            // AJAX request to insert data into the database with the profile picture
+            $.ajax({
+                type: "POST",
+                url: "dbregisterstudent.php",
+                data: formData, // Use the form data instead of the plain object
+                contentType: false, // Set to false to let jQuery handle the content type
+                processData: false, // Set to false to prevent jQuery from processing the data
+                success: function (response) {
+                    // Redirect to success page or display success message
+                    window.location.href = 'login.html';
+                },
+                error: function (xhr, status, error) {
+                    // Handle error response
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function showHelperText(input, text) {
+            const helperText = input.parentElement.querySelector('.helper-text');
+            const errorText = input.parentElement.querySelector('.error-text');
+            const successText = input.parentElement.querySelector('.success-text');
+
+            helperText.innerText = text;
+
+            if (text) {
+                helperText.style.display = 'block';
+                errorText.style.display = 'block';
+                successText.style.display = 'none';
+            } else {
+                helperText.style.display = 'none';
+                errorText.style.display = 'none';
+                successText.style.display = 'block';
+            }
+        }
+    </script>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>

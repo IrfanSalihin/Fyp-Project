@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h2 {
+            font-size: 32px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        h3,
+        h4 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(300px, 1fr));
+            grid-gap: 20px;
+            margin: 0 -20px;
+            /* Add negative margins to remove the horizontal spacing caused by the container */
+            width: calc(100% + 40px);
+            /* Add the width of the negative margins to the total width */
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        .card-content {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .input-field input[type="text"],
+        .input-field input[type="number"],
+        .input-field textarea {
+            font-size: 16px;
+        }
+
+        .input-field label {
+            font-size: 16px;
+        }
+
+        .modal-content h4 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            font-size: 16px;
+        }
+
+        .edit-button {
+            margin-top: 10px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+        }
+    </style>
+    <title>Equipment List Staff Dummy</title>
+</head>
+
+<body>
+    <a href="mainpagestaff.html" class="btn-floating btn-large waves-effect waves-light blue darken-2 back-button">
+        <i class="material-icons">arrow_back</i>
+    </a>
+
+    <h2>Equipment List</h2>
+    <div class="card-grid" id="equipmentGrid">
+        <!-- Equipment cards will be dynamically added here -->
+    </div>
+
+    <!-- Add Equipment Button -->
+    <button class="btn-floating btn-large waves-effect waves-light red add-button" id="addButton">
+        <i class="material-icons">add</i>
+    </button>
+
+    <!-- Add Equipment Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="card">
+                <h4>Add Equipment</h4>
+                <form id="addForm" enctype="multipart/form-data">
+                    <div class="input-field">
+                        <input type="text" id="equipName" required>
+                        <label for="equipName">Equipment Name</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="equipClass" required>
+                        <label for="equipClass">Equipment Class</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="quantity" required>
+                        <label for="quantity">Quantity</label>
+                    </div>
+                    <div class="file-field input-field">
+                        <!-- The equipment image field -->
+                        <div class="btn">
+                            <span>Choose File</span>
+                            <input type="file" id="equipImage" accept="image/*" required>
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <textarea class="materialize-textarea" id="description" required></textarea>
+                        <label for="description">Description</label>
+                    </div>
+                    <button class="btn waves-effect waves-light" type="submit">Add</button>
+                    <button class="modal-close waves-effect waves-light btn-flat" type="button">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Equipment Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="card">
+                <h4>Edit Equipment</h4>
+                <form id="editForm">
+                    <input type="hidden" id="editEquipId">
+                    <div class="input-field">
+                        <input type="text" id="editEquipName" required>
+                        <label for="editEquipName">Equipment Name</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="editEquipClass" required>
+                        <label for="editEquipClass">Equipment Class</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="editQuantity" required>
+                        <label for="editQuantity">Quantity</label>
+                    </div>
+                    <div class="input-field">
+                        <textarea class="materialize-textarea" id="editDescription" required></textarea>
+                        <label for="editDescription">Description</label>
+                    </div>
+                    <button class="btn waves-effect waves-light" type="submit">Update</button>
+                    <button class="modal-close waves-effect waves-light btn-flat" type="button">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const equipmentGrid = document.getElementById('equipmentGrid');
+
+            function fetchEquipmentData() {
+                fetch('fetch_equipment.php')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        equipmentGrid.innerHTML = '';
+
+                        if (data.length === 0) {
+                            console.log('No equipment data available.');
+                            return;
+                        }
+
+                        data.forEach(equipment => {
+                            const card = document.createElement('div');
+                            card.classList.add('card');
+                            card.innerHTML = `
+                                <div class="card-content">
+                                    <span class="card-title">${equipment.fld_equipname}</span>
+                                    <p><strong>Equipment ID:</strong> ${equipment.fld_equipid}</p>
+                                    <p><strong>Equipment Class:</strong> ${equipment.fld_equipclass}</p>
+                                    <p><strong>Quantity:</strong> ${equipment.fld_quantity}</p>
+                                    <p><strong>Description:</strong> ${equipment.fld_equipdescription}</p>
+                                </div>
+                                <div class="card-image">
+                                    <img src="data:image/jpeg;base64,${equipment.fld_equipimage}" alt="Equipment Image">
+                                </div>
+                            `;
+
+                            // Add the Edit button to each equipment card
+                            const editButton = document.createElement('button');
+                            editButton.classList.add('btn', 'waves-effect', 'waves-light', 'edit-button');
+                            editButton.textContent = 'Edit';
+                            editButton.addEventListener('click', function () {
+                                editEquipment(equipment);
+                            });
+
+                            card.appendChild(editButton);
+                            equipmentGrid.appendChild(card);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+            // Move the editForm event listener outside the editEquipment function
+            const editForm = document.getElementById('editForm');
+
+            editForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const editEquipId = document.getElementById('editEquipId');
+                const editEquipName = document.getElementById('editEquipName');
+                const editEquipClass = document.getElementById('editEquipClass');
+                const editQuantity = document.getElementById('editQuantity');
+                const editDescription = document.getElementById('editDescription');
+
+                const updatedData = {
+                    equipId: editEquipId.value,
+                    equipName: editEquipName.value,
+                    equipClass: editEquipClass.value,
+                    quantity: editQuantity.value,
+                    description: editDescription.value,
+                };
+
+                sendUpdateRequest(updatedData);
+            });
+
+            function sendUpdateRequest(data) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'update_equipment.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            const updatedEquipment = JSON.parse(xhr.responseText);
+                            M.toast({ html: 'Equipment updated successfully!', displayLength: 3000 });
+                            const editModalInstance = M.Modal.getInstance(editModal);
+                            editModalInstance.close();
+
+                            // Refresh the equipment list to show the updated information
+                            equipmentGrid.innerHTML = '';
+                            fetchEquipmentData();
+                        } else {
+                            console.error('Error:', xhr.status, xhr.statusText);
+                        }
+                    }
+                };
+
+                xhr.send(JSON.stringify(data));
+            }
+
+            function editEquipment(equipment) {
+                const editModal = document.getElementById('editModal');
+                const editForm = document.getElementById('editForm');
+                const editEquipId = document.getElementById('editEquipId');
+                const editEquipName = document.getElementById('editEquipName');
+                const editEquipClass = document.getElementById('editEquipClass');
+                const editQuantity = document.getElementById('editQuantity');
+                const editDescription = document.getElementById('editDescription');
+
+                editEquipId.value = equipment.fld_equipid;
+                editEquipName.value = equipment.fld_equipname;
+                editEquipClass.value = equipment.fld_equipclass;
+                editQuantity.value = equipment.fld_quantity;
+                editDescription.value = equipment.fld_equipdescription;
+
+                M.updateTextFields();
+
+                M.Modal.getInstance(editModal).open();
+            }
+
+            const storedData = localStorage.getItem('equipmentData');
+            if (storedData) {
+                const data = JSON.parse(storedData);
+                data.forEach(equipment => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.innerHTML = `
+                        <div class="card-content">
+                            <span class="card-title">${equipment.fld_equipname}</span>
+                            <p><strong>Equipment ID:</strong> ${equipment.fld_equipid}</p>
+                            <p><strong>Equipment Class:</strong> ${equipment.fld_equipclass}</p>
+                            <p><strong>Quantity:</strong> ${equipment.fld_quantity}</p>
+                            <p><strong>Description:</strong> ${equipment.fld_equipdescription}</p>
+                        </div>
+                        <div class="card-image">
+                            <img src="data:image/jpeg;base64,${equipment.fld_equipimage}" alt="Equipment Image">
+                        </div>
+                    `;
+
+                    // Add the Edit button to each equipment card
+                    const editButton = document.createElement('button');
+                    editButton.classList.add('btn', 'waves-effect', 'waves-light');
+                    editButton.textContent = 'Edit';
+                    editButton.addEventListener('click', function () {
+                        editEquipment(equipment);
+                    });
+
+                    card.appendChild(editButton);
+                    equipmentGrid.appendChild(card);
+                });
+            } else {
+                fetchEquipmentData();
+            }
+
+            const addButton = document.getElementById('addButton');
+            const addModal = document.getElementById('addModal');
+            const addForm = document.getElementById('addForm');
+
+            M.Modal.init(addModal);
+
+            addButton.addEventListener('click', function () {
+                M.Modal.getInstance(addModal).open();
+            });
+
+            addForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const equipName = document.getElementById('equipName').value;
+                const equipClass = document.getElementById('equipClass').value;
+                const quantity = document.getElementById('quantity').value;
+                const image = document.getElementById('equipImage').files[0];
+                const description = document.getElementById('description').value;
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const imageData = event.target.result;
+
+                    const formData = new FormData();
+                    formData.append('equipName', equipName);
+                    formData.append('equipClass', equipClass);
+                    formData.append('quantity', quantity);
+                    formData.append('equipImage', image);
+                    formData.append('description', description);
+
+                    fetch('add_equipment.php', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(newEquipment => {
+                            M.toast({ html: 'Equipment added successfully!', displayLength: 3000 });
+                            const addModalInstance = M.Modal.getInstance(addModal);
+
+                            addModalInstance.close();
+                            document.getElementById('addForm').reset();
+                            M.updateTextFields();
+
+                            const card = document.createElement('div');
+                            card.classList.add('card');
+                            card.innerHTML = `
+                                <div class="card-content">
+                                    <span class="card-title">${newEquipment.fld_equipname}</span>
+                                    <p><strong>Equipment ID:</strong> ${newEquipment.fld_equipid}</p>
+                                    <p><strong>Equipment Class:</strong> ${newEquipment.fld_equipclass}</p>
+                                    <p><strong>Quantity:</strong> ${newEquipment.fld_quantity}</p>
+                                    <p><strong>Description:</strong> ${newEquipment.fld_equipdescription}</p>
+                                </div>
+                                <div class="card-image">
+                                    <img src="data:image/jpeg;base64,${newEquipment.fld_equipimage}" alt="Equipment Image">
+                                </div>
+                            `;
+                            equipmentGrid.appendChild(card);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                };
+
+                reader.readAsDataURL(image);
+            });
+
+            // Fetch and refresh equipment data when the page is loaded or refreshed
+            window.addEventListener('load', function () {
+                equipmentGrid.innerHTML = '';
+                fetchEquipmentData();
+            });
+
+            // Initialize Materialize components
+            M.AutoInit();
+
+        });
+    </script>
+</body>
+
+</html>

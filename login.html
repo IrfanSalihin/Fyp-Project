@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .left-half {
+            flex: 1;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+            .left-half form {
+                width: 100%;
+                max-width: 400px;
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin-top: 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+                .left-half form input[type="text"],
+                .left-half form input[type="password"],
+                .left-half form input[type="submit"] {
+                    width: 100%;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 3px;
+                    border: 1px solid #ccc;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-size: 14px;
+                }
+
+                .left-half form input[type="submit"] {
+                    background-color: #4CAF50;
+                    color: #fff;
+                    cursor: pointer;
+                    font-weight: bold;
+                    letter-spacing: 1px;
+                    transition: background-color 0.3s ease;
+                }
+
+                    .left-half form input[type="submit"]:hover {
+                        background-color: #45a049;
+                    }
+
+            .left-half h1 {
+                color: #333;
+                font-size: 24px;
+                text-align: center;
+                margin-bottom: 20px;
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: 700;
+            }
+
+        .logo {
+            width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .right-half {
+            flex: 1;
+            background-image: url('../FYP/pics/login_right_half.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .right-half h1 {
+                color: #fff;
+                font-size: 36px;
+                text-align: center;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: 700;
+            }
+
+        h2 {
+            text-align: center;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .register-btn-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            display: inline-block;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+            .register-btn:hover {
+                background-color: #2980b9;
+            }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .popup h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 600;
+        }
+
+        .popup-options {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-option {
+            background-color: #3498db;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+            .popup-option:hover {
+                background-color: #2980b9;
+            }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-half">
+            <img class="logo" src="../FYP/pics/ukmlogo.png" alt="Logo">
+            <h1>UKM Sports Equipment Booking System</h1>
+            <form action="dblogin.php" method="POST">
+                <h2>Login</h2>
+                <input type="text" name="username" placeholder="Matric Number" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <input type="submit" value="Login">
+            </form>
+            <div class="register-btn-container">
+                <div class="register-btn" onclick="openRegisterPopup()">Register</div>
+            </div>
+        </div>
+        <div class="right-half"></div>
+    </div>
+
+    <div class="popup" id="registerPopup">
+        <div class="popup-content">
+            <h3>Register as:</h3>
+            <div class="popup-options">
+                <div class="popup-option" onclick="redirectTo('registerstudent.html')">Student</div>
+                <div class="popup-option" onclick="redirectTo('registerstaff.html')">Staff</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRegisterPopup() {
+            var popup = document.getElementById('registerPopup');
+            popup.style.display = 'flex';
+        }
+
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+
+</html>
